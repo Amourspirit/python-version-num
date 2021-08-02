@@ -2,8 +2,10 @@ __pycache__
 *.pyc
 scratch/
 tmp/
-test/
 out/
 dist/
+.pytest_cache
+htmlcov/
 *.log
 .vscode/settings.json
+.coverage
