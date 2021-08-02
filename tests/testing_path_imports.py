@@ -7,7 +7,7 @@ import os
 def set_import_paths():
     script_path = Path(os.path.dirname(__file__)).parent
     test_path = script_path / "tests"
-    version_path = script_path / "version"
+    version_path = script_path / "src"
 
     _paths = (test_path, script_path, version_path)
     i = 0

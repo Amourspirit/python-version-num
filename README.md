@@ -5,10 +5,10 @@ Sealed Class
 
 ## Installation
 
-You can install the Version Class from [PyPI](https://pypi.org/project/version-comp/):
+You can install the Version Class from [PyPI](https://pypi.org/project/verr/):
 
-```text
-pip install version-comp
+```python
+pip install verr
 ```
 
 ## Constructors
@@ -42,9 +42,11 @@ pip install version-comp
 | ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif)                                                                | to_str()            | Converts the value of the current Version object to its equivalent String representation.                                                                 |
 | ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif)                                                                | to_str(field_count) | Converts the value of the current Version object to its equivalent String representation. A specified count indicates the number of components to return. |
 
-## Examples
+## Usage
 
-```py
+```python
+from verr import Version
+
 v = Version(1, 2, 3, 4)
 print(v.major) # 1
 print(v.minor) # 2

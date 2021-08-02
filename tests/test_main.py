@@ -1,7 +1,7 @@
 # coding: utf-8
 import testing_path_imports
 import unittest
-from version.ver import Version, ArgumentError, ArgumentOutOfRangeError, ArgumentNullError
+from src.verr import Version, ArgumentError, ArgumentOutOfRangeError, ArgumentNullError
 
 # run test in order
 unittest.TestLoader.sortTestMethodsUsing = None

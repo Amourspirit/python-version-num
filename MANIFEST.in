@@ -1,0 +1,4 @@
+include LICENSE
+recursive-include res *.svg
+recursive-include src *.py
+recursive-include tests *.py

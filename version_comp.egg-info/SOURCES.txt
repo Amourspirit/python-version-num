@@ -1,8 +1,0 @@
-README.md
-setup.py
-version/__init__.py
-version/ver.py
-version_comp.egg-info/PKG-INFO
-version_comp.egg-info/SOURCES.txt
-version_comp.egg-info/dependency_links.txt
-version_comp.egg-info/top_level.txt
