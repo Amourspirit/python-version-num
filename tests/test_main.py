@@ -1,5 +1,8 @@
 # coding: utf-8
-import testing_path_imports
+try:
+    import path_imports
+except:
+    pass
 import unittest
 from src.verr import Version, ArgumentError, ArgumentOutOfRangeError, ArgumentNullError
 
