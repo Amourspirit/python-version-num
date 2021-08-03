@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/Amourspirit/python-version-num/branch/master/graph/badge.svg)](https://codecov.io/gh/Amourspirit/python-version-num) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Amourspirit/python-version-num/CodeCov) ![GitHub](https://img.shields.io/github/license/Amourspirit/python-version-num) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/verr) ![PyPI - Wheel](https://img.shields.io/pypi/wheel/verr)
+
 # Version Class
 
 Represents a version number. This class cannot be extended.
@@ -17,6 +19,7 @@ pip install verr
 |-----------------------------------------------------------------|----------------------------------------|---------------------------------------------------------------------------------------------------------------|
 | ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif) | Version()                              | Initializes a new instance of the Version class.                                                              |
 | ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif) | Version(ver_str)                       | Initializes a new instance of the Version class using the specified string to be parsed                       |
+| ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif) | Version(ver_dict)                      | Initializes a new instance of the Version class using the specified dict to be parsed. Useful for loading json|
 | ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif) | Version(version)                       | Initializes a new instance of the Version class using the specified version.                                  |
 | ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif) | Version(major, minor)                  | Initializes a new instance of the Version class using the specified major and minor values.                   |
 | ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif) | Version(major, minor, build)           | Initializes a new instance of the Version class using the specified major, minor, and build values.           |
@@ -64,7 +67,7 @@ v2 = Version.parse("1.2.3")
 print(v1 > v2) # False
 print(v1 <= v2) # True
 
-v = Version(1,2,3, int("ffbbff0b", 16))
+v = Version(1,2,3, "0xffbbff0b")
 print(v.major_revision == int("ffbb", 16)) # True
 print(v.minor_revision == int("ff0b", 16)) # True
 print(v) # 1.2.3.4290510603
@@ -77,4 +80,24 @@ if v_result[0] == True:
 else:
   err = v_result[1]
   print(e)
+
+# JSON Usage
+v1 = Version(1, 2, 3, 4)
+json_str = json.dumps(v1)
+print(json_str) # {"major": 1, "minor": 2, "build": 3, "revision": 4}
+v2 = Version(json.loads(json_str))
+print(v1 == v2) # True
+
+v1 = Version('0xfd', 22)
+json_str = json.dumps(v1)
+print(json_str)  # {"major": 253, "minor": 22}
+v2 = Version(json.loads(json_str))
+print(v1 == v2)  # True
+
+# hex usage, hex components must start with 0x and are not case sensitive
+v = Version('0xd', '0x02', '0x001a', '0XAB')
+print(v)  # 13.2.26.171
+
+v = Version.parse('0xd.0x02.0x001a.0XAB')
+print(v)  # 13.2.26.171
 ```
