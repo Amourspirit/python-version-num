@@ -10,7 +10,7 @@ with open(HERE/ "README.md") as fh:
 # This call to setup() does all the work
 setup(
     name="verr",
-    version="0.1.2",
+    version="0.1.3",
     description="Represents a version number that can be parsed and compared.",
     long_description_content_type="text/markdown",
     long_description=README,

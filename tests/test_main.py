@@ -323,6 +323,39 @@ class TestVersion(unittest.TestCase):
         v_result = Version.try_parse('a.2.3.5')
         e = v_result[1]
         self.assertIsInstance(e, ArgumentError)
+
+    def test209_try_parse_hex(self):
+        s = "0x1f.0x4D.0XAa.0xbb"
+        v_result = Version.try_parse(s)
+        v = v_result[1]
+        self.assertTrue(v_result[0])
+        self.assertEqual(v.major, 31)
+        self.assertEqual(v.minor, 77)
+        self.assertEqual(v.build, 170)
+        self.assertEqual(v.revision, 187)
     
+    def test210_try_parse_bad_hex(self):
+        s = "0x1f.0e4D.0XAa.0xbb"
+        v_result = Version.try_parse(s)
+        e = v_result[1]
+        self.assertFalse(v_result[0])
+        self.assertIsInstance(e, ArgumentError)
+
+    def test301_parse_hex(self):
+        s = "0x1f.0x4D.0XAa.0xbb"
+        v = Version.parse(s)
+        self.assertEqual(v.major, 31)
+        self.assertEqual(v.minor, 77)
+        self.assertEqual(v.build, 170)
+        self.assertEqual(v.revision, 187)
+    
+    def test303_parse_hex_with_bad_value(self):
+        s = "0x1f.0x4D.0XAa.0ybb"
+        self.assertRaises(ArgumentError, Version.parse,s)
+    
+    def test303_parse_non_hex(self):
+        s = "0x1f.0x4D.0XAa.0xbg"
+        self.assertRaises(ArgumentError, Version.parse, s)
+
 if __name__ == '__main__':
     unittest.main()

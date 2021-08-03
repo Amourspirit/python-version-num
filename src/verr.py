@@ -2,7 +2,7 @@
 
 from enum import Enum
 from os import minor
-from typing import Tuple, Union
+from typing import ClassVar, Tuple, Union
 # region Error Classes
 class ArgumentError(ValueError):
     '''The error that is raised when one of the arguments provided to a method is not valid.'''
@@ -17,7 +17,7 @@ class FormatError(ValueError):
 
     
 # endregion Error Classes
-class Version:
+class Version(dict):
     '''
     Represents the version number. This class cannot be extended.
     
@@ -110,6 +110,7 @@ class Version:
         '''
         if self.__class__.__name__ != 'Version' :
             raise TypeError("version is a seal class")
+        super_args = {}
         self._major = None
         self._minor = None
         self._build = Version._default_no_val
@@ -139,40 +140,91 @@ class Version:
             if isinstance(major, int):
                 self._major = major
                 self._minor = 0
+                self._set_super_args(super_args, 'major', self._major)
+                self._set_super_args(super_args, 'minor', self._minor)
+            elif isinstance(major, dict):
+                self._init_by_dict(major, super_args)
             else:
                 version2 = Version.parse(major)
                 self._major= version2._major
                 self._minor= version2._minor
                 self._build= version2._build
                 self._revision = version2._revision
+                self._set_super_args(super_args, 'major', self._major)
+                self._set_super_args(super_args, 'minor', self._minor)
+                if self._build != Version._default_no_val:
+                    self._set_super_args(
+                        super_args, 'build', self._build)
+                if self._revision != Version._default_no_val:
+                    self._set_super_args(
+                        super_args, 'revision', self._revision)
         elif build is None:
-            self._major = self._parse_int_arg(arg=major, arg_name='major')
-            self._minor = self._parse_int_arg(arg=minor, arg_name='minor')
+            self._major = Version._parse_int_arg(arg=major, arg_name='major')
+            self._minor = Version._parse_int_arg(arg=minor, arg_name='minor')
+            self._set_super_args(super_args, 'major', self._major)
+            self._set_super_args(super_args, 'minor', self._minor)
         elif revision is None:
-            self._major = self._parse_int_arg(arg=major, arg_name='major')
-            self._minor = self._parse_int_arg(arg=minor, arg_name='minor')
-            self._build = self._parse_int_arg(arg=build, arg_name='build')
+            self._major = Version._parse_int_arg(arg=major, arg_name='major')
+            self._minor = Version._parse_int_arg(arg=minor, arg_name='minor')
+            self._build = Version._parse_int_arg(arg=build, arg_name='build')
+            self._set_super_args(super_args, 'major', self.major)
+            self._set_super_args(super_args, 'minor', self._minor)
+            self._set_super_args(super_args, 'build', self._build)
         else:
-            self._major = self._parse_int_arg(arg=major, arg_name='major')
-            self._minor = self._parse_int_arg(arg=minor, arg_name='minor')
-            self._build = self._parse_int_arg(arg=build, arg_name='build')
-            self._revision = self._parse_int_arg(arg=revision, arg_name='revision')
+            self._major = Version._parse_int_arg(arg=major, arg_name='major')
+            self._minor = Version._parse_int_arg(arg=minor, arg_name='minor')
+            self._build = Version._parse_int_arg(arg=build, arg_name='build')
+            self._revision = Version._parse_int_arg(arg=revision, arg_name='revision')
+            self._set_super_args(super_args, 'major', self.major)
+            self._set_super_args(super_args, 'minor', self._minor)
+            self._set_super_args(super_args, 'build', self._build)
+            self._set_super_args(super_args, 'revision', self._revision)
         self._validate()
+        dict.__init__(self, **super_args)
  
+    def _set_super_args(self, args:dict, key:str, value:int) -> None:
+        if not key in args:
+            args[key] = value
             
-    def _parse_int_arg(self, arg, arg_name:str) -> int:
+    def _init_by_dict(self, d:dict, super_args:dict):
+        local_d = {
+            'major': True,
+            'minor':True,
+            'build': False,
+            'revision': False
+        }
+        for k, v in local_d.items():
+            if k in d:
+                val = d[k]
+                i = Version._parse_int_arg(val,k)
+                setattr(self, f"_{k}",i)
+                super_args[k] = i
+            else:
+                if v:
+                    raise ArgumentNullError(f"{self.__class__.__name__} dictionary missing required key of '{k}'")
+
+    @classmethod
+    def _parse_int_arg(cls, arg, arg_name:str) -> int:
         if isinstance(arg, int):
             return arg
         if isinstance(arg, str):
+            _arg = arg.strip()
             result = -1
             try:
-                result = int(arg)
+                result = int(_arg)
                 return result
             except:
                 pass
-        raise ArgumentError(
-            (f"{self.__class__.__name__}, arg '{arg_name}' cannot be converted to an interger."
-                            f" '{arg_name}' type '{type(arg).__name__}'"))
+            _arg = _arg.lower()
+            if _arg.startswith('0x'):
+                try:
+                    result = int(_arg, 16)
+                    return result
+                except:
+                    pass
+        msg = (f"{cls.__name__}, arg '{arg_name}' cannot be converted to an interger."
+               f" '{arg_name}' type '{type(arg).__name__}'")
+        raise ArgumentError(msg)
 
     def _validate(self) -> None:
         msg = "Version's parameters must be greater than or equal to zero."
@@ -189,7 +241,7 @@ class Version:
     def _try_parse_component(component:str, component_name: str, result:'Version.VersionResult') -> Tuple[bool, int]: 
         pc = -1
         try:
-            pc = int(component)
+            pc = Version._parse_int_arg(component, component_name)
         except Exception as e:
             result.set_failure(Version.ParseFailureKind.FORMAT_ERR, component)
             return False, -1
@@ -463,4 +515,9 @@ class Version:
     
     def __str__(self):
        return self.to_str()
+   
+    def __repr__(self):
+        s = self.to_str()
+        s_arg = s.replace('.', ', ')
+        return f"<{self.__class__.__name__}({s_arg})>"
     # endregion string methods
