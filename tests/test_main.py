@@ -1,10 +1,9 @@
 # coding: utf-8
-try:
+if __name__ == '__main__':
     import path_imports
-except:
-    pass
+
 import unittest
-from src.verr import Version, ArgumentError, ArgumentOutOfRangeError, ArgumentNullError
+from verr import Version, ArgumentError, ArgumentOutOfRangeError, ArgumentNullError
 
 # run test in order
 unittest.TestLoader.sortTestMethodsUsing = None
@@ -343,6 +342,10 @@ class TestVersion(unittest.TestCase):
         e = v_result[1]
         self.assertFalse(v_result[0])
         self.assertIsInstance(e, ArgumentError)
+    
+    def test220_parse_bad_length(self):
+        self.assertRaises(ArgumentError, Version.parse, input=".1.2.3.4")
+        self.assertRaises(ArgumentError, Version.parse, input=".")
 
     def test301_parse_hex(self):
         s = "0x1f.0x4D.0XAa.0xbb"

@@ -1,9 +1,8 @@
-try:
+if __name__ == '__main__':
     import path_imports
-except:
-    pass
+
 import unittest
-from src.verr import Version, ArgumentError, ArgumentOutOfRangeError, ArgumentNullError
+from verr import Version, ArgumentError, ArgumentOutOfRangeError, ArgumentNullError
 import json
 
 # run test in order

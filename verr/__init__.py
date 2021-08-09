@@ -1,21 +1,28 @@
 # coding: utf-8
+__version__ = "1.0.0"
+# coding: utf-8
 
 from enum import Enum
-from os import minor
-from typing import ClassVar, Tuple, Union
+from typing import Tuple, Union
 # region Error Classes
+
+
 class ArgumentError(ValueError):
     '''The error that is raised when one of the arguments provided to a method is not valid.'''
+
+
 class ArgumentNullError(ValueError):
     '''The error that is raised when a null reference is passed to a method that does not accept it as a valid argument.'''
+
 
 class ArgumentOutOfRangeError(IndexError):
     '''The error that is raised when the value of an argument is outside the allowable range of values as defined by the invoked method.'''
 
+
 class FormatError(ValueError):
     '''The error that is raised when the format of an argument is invalid, or when a composite format string is not well formed.'''
 
-    
+
 # endregion Error Classes
 class Version(dict):
     '''
@@ -34,17 +41,18 @@ class Version(dict):
 
     class VersionResult:
         def __init__(self):
-            self._parsed_version = None # Version
-            self._failure: Version.ParseFailureKind = Version.ParseFailureKind.NONE # Version.ParseFailureKind
-            self._exception_argument = None # str
-            self._argument_name = '' # str
-            self._can_throw = False # bool
+            self._parsed_version = None  # Version
+            # Version.ParseFailureKind
+            self._failure: Version.ParseFailureKind = Version.ParseFailureKind.NONE
+            self._exception_argument = None  # str
+            self._argument_name = ''  # str
+            self._can_throw = False  # bool
 
-        def init(self, argument_name:str, can_throw:bool):
+        def init(self, argument_name: str, can_throw: bool):
             self._can_throw = can_throw
             self._argument_name = argument_name
-        
-        def set_failure(self, failure: 'Version.ParseFailureKind', argument:str = ""):
+
+        def set_failure(self, failure: 'Version.ParseFailureKind', argument: str = ""):
             self._failure = failure
             self._exception_argument = argument
             if self._can_throw:
@@ -62,19 +70,20 @@ class Version(dict):
                     _ = int(self._exception_argument)
                 except ValueError as e:
                     return ArgumentError(e)
-                return FormatError("Input string was not in a correct format.")
+                except Exception:
+                    return FormatError("Input string was not in a correct format.")
             return ArgumentError("Version string portion was too short or too long.")
-        
+
         @property
         def parsed_version(self) -> 'Version':
             return self._parsed_version
-        
+
         @parsed_version.setter
         def parsed_version(self, value: 'Version') -> None:
             self._parsed_version = value
     # endregion Internal Classes
     _default_no_val: int = -999
-    
+
     def __init__(self, *args):
         '''
         Class constructor
@@ -108,7 +117,7 @@ class Version(dict):
         Version(major, minor, build, revision)
             Initializes a new instance of the MfVersion class with the specified major, minor, build, and revision numbers.
         '''
-        if self.__class__.__name__ != 'Version' :
+        if self.__class__.__name__ != 'Version':
             raise TypeError("version is a seal class")
         super_args = {}
         self._major = None
@@ -117,9 +126,10 @@ class Version(dict):
         self._revision = Version._default_no_val
         self._arg_len = len(args)
         if self._arg_len > 4:
-            raise ArgumentError(f"{self.__class__.__name__} has a max of four args")
-        
-        major:Union[str,int, None] = None
+            raise ArgumentError(
+                f"{self.__class__.__name__} has a max of four args")
+
+        major: Union[str, int, None] = None
         minor: Union[int, str, float, None] = None
         build: Union[int, str, float, None] = None
         revision: Union[int, str, float, None] = None
@@ -146,9 +156,9 @@ class Version(dict):
                 self._init_by_dict(major, super_args)
             else:
                 version2 = Version.parse(major)
-                self._major= version2._major
-                self._minor= version2._minor
-                self._build= version2._build
+                self._major = version2._major
+                self._minor = version2._minor
+                self._build = version2._build
                 self._revision = version2._revision
                 self._set_super_args(super_args, 'major', self._major)
                 self._set_super_args(super_args, 'minor', self._minor)
@@ -174,37 +184,39 @@ class Version(dict):
             self._major = Version._parse_int_arg(arg=major, arg_name='major')
             self._minor = Version._parse_int_arg(arg=minor, arg_name='minor')
             self._build = Version._parse_int_arg(arg=build, arg_name='build')
-            self._revision = Version._parse_int_arg(arg=revision, arg_name='revision')
+            self._revision = Version._parse_int_arg(
+                arg=revision, arg_name='revision')
             self._set_super_args(super_args, 'major', self.major)
             self._set_super_args(super_args, 'minor', self._minor)
             self._set_super_args(super_args, 'build', self._build)
             self._set_super_args(super_args, 'revision', self._revision)
         self._validate()
         dict.__init__(self, **super_args)
- 
-    def _set_super_args(self, args:dict, key:str, value:int) -> None:
+
+    def _set_super_args(self, args: dict, key: str, value: int) -> None:
         if not key in args:
             args[key] = value
-            
-    def _init_by_dict(self, d:dict, super_args:dict):
+
+    def _init_by_dict(self, d: dict, super_args: dict):
         local_d = {
             'major': True,
-            'minor':True,
+            'minor': True,
             'build': False,
             'revision': False
         }
         for k, v in local_d.items():
             if k in d:
                 val = d[k]
-                i = Version._parse_int_arg(val,k)
-                setattr(self, f"_{k}",i)
+                i = Version._parse_int_arg(val, k)
+                setattr(self, f"_{k}", i)
                 super_args[k] = i
             else:
                 if v:
-                    raise ArgumentNullError(f"{self.__class__.__name__} dictionary missing required key of '{k}'")
+                    raise ArgumentNullError(
+                        f"{self.__class__.__name__} dictionary missing required key of '{k}'")
 
     @classmethod
-    def _parse_int_arg(cls, arg, arg_name:str) -> int:
+    def _parse_int_arg(cls, arg, arg_name: str) -> int:
         if isinstance(arg, int):
             return arg
         if isinstance(arg, str):
@@ -236,9 +248,9 @@ class Version(dict):
             raise ArgumentOutOfRangeError("build", msg)
         if self._revision != Version._default_no_val and self._revision < 0:
             raise ArgumentOutOfRangeError("revision", msg)
-            
+
     @staticmethod
-    def _try_parse_component(component:str, component_name: str, result:'Version.VersionResult') -> Tuple[bool, int]: 
+    def _try_parse_component(component: str, component_name: str, result: 'Version.VersionResult') -> Tuple[bool, int]:
         pc = -1
         try:
             pc = Version._parse_int_arg(component, component_name)
@@ -246,12 +258,13 @@ class Version(dict):
             result.set_failure(Version.ParseFailureKind.FORMAT_ERR, component)
             return False, -1
         if pc < 0:
-            result.set_failure(Version.ParseFailureKind.ARGUMENT_OUT_OF_RANGE_ERR, component_name)
-            return False , -1
+            result.set_failure(
+                Version.ParseFailureKind.ARGUMENT_OUT_OF_RANGE_ERR, component_name)
+            return False, -1
         return True, pc
-    
+
     @staticmethod
-    def _try_parse_version(version:str, result: 'Version.VersionResult') -> bool:
+    def _try_parse_version(version: str, result: 'Version.VersionResult') -> bool:
         _ver = version.strip()
         if len(_ver) == 0:
             result.set_failure(Version.ParseFailureKind.ARGUMENT_NULL_ERR)
@@ -276,7 +289,7 @@ class Version(dict):
         split_count -= 2
         if split_count > 0:
             build = 0
-            tp = Version._try_parse_component(ver_lst[2],"build", result)
+            tp = Version._try_parse_component(ver_lst[2], "build", result)
             if tp[0] == False:
                 return False
             else:
@@ -284,7 +297,8 @@ class Version(dict):
             split_count -= 1
             if split_count > 0:
                 revision = 0
-                tp = Version._try_parse_component(ver_lst[3],"revision", result)
+                tp = Version._try_parse_component(
+                    ver_lst[3], "revision", result)
                 if tp[0] == False:
                     return False
                 else:
@@ -295,7 +309,7 @@ class Version(dict):
         else:
             result.parsed_version = Version(major, minor)
         return True
-    
+
     @staticmethod
     def parse(input: str):
         '''
@@ -318,7 +332,8 @@ class Version(dict):
         ```
         '''
         if not isinstance(input, str):
-            raise ArgumentError("Version.Parse() 'input' must be of type 'str'")
+            raise ArgumentError(
+                "Version.Parse() 'input' must be of type 'str'")
         version_result = Version.VersionResult()
         version_result.init('input', True)
         # no need to test the result of the following line. It will never raise an error when init is set with True: init('input' True)
@@ -326,7 +341,7 @@ class Version(dict):
         return version_result.parsed_version
 
     @staticmethod
-    def try_parse(input: str) -> Tuple[bool, Union['Version',Exception]]:
+    def try_parse(input: str) -> Tuple[bool, Union['Version', Exception]]:
         '''
         Converts the string representation of a version number to an equivalent `Version` instance.
         @input: A string that contains a version number to convert.
@@ -358,6 +373,7 @@ class Version(dict):
             return False, err
         return True, version_result.parsed_version
     # region Properties
+
     @property
     def build(self) -> int:
         '''
@@ -367,15 +383,15 @@ class Version(dict):
         if self._build == Version._default_no_val:
             return 0
         return self._build
-    
+
     @property
-    def major(self)-> int:
+    def major(self) -> int:
         '''
         Gets the value of the major component of the version number for the current Version instnace.
         @return: int representing major
         '''
         return self._major
-    
+
     @property
     def major_revision(self) -> int:
         '''
@@ -392,15 +408,15 @@ class Version(dict):
         '''
         hi_word = self.revision >> 16
         return hi_word
-    
+
     @property
-    def minor(self)-> int:
+    def minor(self) -> int:
         '''
         Gets the value of the minor component of the version number for the current Version instnace.
         @return: int representing minor
         '''
         return self._minor
-    
+
     @property
     def minor_revision(self) -> int:
         '''
@@ -419,7 +435,7 @@ class Version(dict):
         return lo_word
 
     @property
-    def revision(self)-> int:
+    def revision(self) -> int:
         '''
         Gets the value of the revision component of the version number for the current Version instnace.
         @return: int representing minor
@@ -450,7 +466,6 @@ class Version(dict):
             return 1
         return -1
 
-
     def __eq__(self, other: 'Version'):
         if not isinstance(other, Version):
             return NotImplemented
@@ -475,7 +490,7 @@ class Version(dict):
         if not isinstance(other, Version):
             return NotImplemented
         return self._compare(other) >= 0
-    
+
     def __hash__(self):
         _int = 0
         _int |= (self.major & 15) << 28
@@ -485,7 +500,8 @@ class Version(dict):
         return _int
     # endregion Compare
     # region string methodos
-    def _to_str(self, field_count:int):
+
+    def _to_str(self, field_count: int):
         if field_count == 1:
             return f"{self.major}"
         elif field_count == 2:
@@ -500,22 +516,22 @@ class Version(dict):
             raise ArgumentError(msg, 'field_count')
         if field_count == 4:
             return f"{self.major}.{self.minor}.{self.build}.{self.revision}"
-        
-    def to_str(self, field_count:int=-1) -> str:
+
+    def to_str(self, field_count: int = -1) -> str:
         if field_count > 0:
             if field_count > 4:
-                raise ArgumentOutOfRangeError("field_count must be from 1 to 4")
+                raise ArgumentOutOfRangeError(
+                    "field_count must be from 1 to 4")
             return self._to_str(field_count)
         if self._build == Version._default_no_val:
             return self._to_str(2)
         if self._revision == Version._default_no_val:
             return self._to_str(3)
         return self._to_str(4)
-    
-    
+
     def __str__(self):
        return self.to_str()
-   
+
     def __repr__(self):
         s = self.to_str()
         s_arg = s.replace('.', ', ')
