@@ -35,43 +35,64 @@ pip install verr
 | ![Img-Property.gif](https://i.postimg.cc/kMykTn2p/Img-Property.gif) | revision       | Gets the value of the revision component of the version number for the current Version object. |
 | ![Img-Property.gif](https://i.postimg.cc/kMykTn2p/Img-Property.gif) | major_revision | Gets the high 16 bits of the revision number.                                                  |
 | ![Img-Property.gif](https://i.postimg.cc/kMykTn2p/Img-Property.gif) | minor_revision | Gets the low 16 bits of the revision number.                                                   |
+| ![Img-Property.gif](https://i.postimg.cc/kMykTn2p/Img-Property.gif) | elements       | Gets the number of version elements of the current instance.                                   |
 
 ## Methods
 
-|                                                                                                                                | Name                | Description                                                                                                                                               |
-|--------------------------------------------------------------------------------------------------------------------------------|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif)![Img-Static.png](https://i.postimg.cc/zGMmT0yD/Img-Static.png) | parse(input)        | Converts the string representation of a version number to an equivalent Version object. Raises errors if input has issues.                                |
-| ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif)![Img-Static.png](https://i.postimg.cc/zGMmT0yD/Img-Static.png) | try_parse(input)    | Converts the string representation of a version number to an equivalent Version object. Does not raise errors.                                            |
-| ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif)                                                                | to_str()            | Converts the value of the current Version object to its equivalent String representation.                                                                 |
-| ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif)                                                                | to_str(field_count) | Converts the value of the current Version object to its equivalent String representation. A specified count indicates the number of components to return. |
+|                                                                                                                                | Name                  | Description                                                                                                                                             |
+|--------------------------------------------------------------------------------------------------------------------------------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif)![Img-Static.png](https://i.postimg.cc/zGMmT0yD/Img-Static.png) | parse(input)          | Converts the string representation of a version number to an equivalent Version object. Raises errors if input has issues.                              |
+| ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif)![Img-Static.png](https://i.postimg.cc/zGMmT0yD/Img-Static.png) | try_parse(input)      | Converts the string representation of a version number to an equivalent Version object. Does not raise errors.                                          |
+| ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif)                                                                | to_str()              | Converts the value of the current Version object to its equivalent String representation.                                                               |
+| ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif)                                                                | to_str(field_count)   | Converts the value of the current Version object to its equivalent String representation. A specified count indicates the number of elements to return. |
+| ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif)                                                                | to_tuple()            | Converts the value of the current Version object to its equivalent tuple representation.                                                                |
+| ![Img-Method.gif](https://i.postimg.cc/QCSwCbL3/Img-Method.gif)                                                                | to_tuple(field_count) | Converts the value of the current Version object to its equivalent tuple representation. A specified count indicates the number of elements to return.  |
 
 ## Usage
 
 ```python
 from verr import Version
 
-v = Version(1, 2, 3, 4)
-print(v.major) # 1
-print(v.minor) # 2
-print(v.build) # 3
-print(v.revision) # 4
-print(v) # 1.2.3.4
+v = Version(11, 22, 33, 44)
+print(v.major) # 11
+print(v.minor) # 22
+print(v.build) # 33
+print(v.revision) # 44
+print(v) # 11.22.33.44
+print(v.elements) # 4
 
-v = Version.parse("1.2.3")
-print(v.major) # 1
-print(v.minor) # 2
-print(v.build) # 3
+v = Version(11, 22)
+print(v.major) # 11
+print(v.minor) # 22
+print(v.build) # 0
+print(v.revision) # 0
+print(v.elements) # 2
+print(v.to_tuple()) # (11, 22)
+print(v.to_str()) # 11.22
+
+
+v = Version.parse("11.22.33")
+print(v.major) # 11
+print(v.minor) # 22
+print(v.build) # 33
+print(v.revision) # 0
+print(v.elements) # 3
+print(v.to_tuple()) # (11, 22, 33)
+print(v.to_str()) # 11.22.33
 
 v1 = Version.parse("1.2.2")
 v2 = Version.parse("1.2.3")
 print(v1 > v2) # False
 print(v1 <= v2) # True
 
-v = Version(1,2,3, "0xffbbff0b")
+v = Version(1, 2, 3, "0xffbbff0b")
 print(v.major_revision == int("ffbb", 16)) # True
 print(v.minor_revision == int("ff0b", 16)) # True
 print(v) # 1.2.3.4290510603
 print(v.to_str(3)) # 1.2.3
+print(v.to_tuple()) # (1, 2, 3, 4290510603)
+print(v.to_tuple(3)) # (1, 2, 3)
+print(v.elements) # 4
 
 v_result = Version.try_parse("22.3")
 if v_result[0] == True:

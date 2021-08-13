@@ -13,7 +13,9 @@ def main():
     # see: https://stackoverflow.com/questions/41748464/pytest-cannot-import-module-while-python-can
     cmd_str = f"python -m pytest{cov_mod} --cov-report=html"
     res = run(cmd_str.split(' '))
-    print(cmd_str)
+    if res and res.returncode != 0:
+        print(res)
+    # print(cmd_str)
 
 if __name__ == '__main__':
     main()

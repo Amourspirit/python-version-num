@@ -1,9 +1,9 @@
 # coding: utf-8
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 # coding: utf-8
 
 from enum import Enum
-from typing import Tuple, Union
+from typing import Optional, Tuple, Union
 # region Error Classes
 
 
@@ -120,10 +120,11 @@ class Version(dict):
         if self.__class__.__name__ != 'Version':
             raise TypeError("version is a seal class")
         super_args = {}
-        self._major = None
-        self._minor = None
-        self._build = Version._default_no_val
-        self._revision = Version._default_no_val
+        self._element_count: Union[int, None] = None
+        self._major: Union[int, None] = None
+        self._minor: Union[int, None] = None
+        self._build: int = Version._default_no_val
+        self._revision: int = Version._default_no_val
         self._arg_len = len(args)
         if self._arg_len > 4:
             raise ArgumentError(
@@ -443,6 +444,34 @@ class Version(dict):
         if self._revision == Version._default_no_val:
             return 0
         return self._revision
+    
+    @property
+    def elements(self) -> int:
+        '''
+        Gets the number of elements in the current instance.
+        @return: int of 2, 3 or 4
+        @example:
+        ```
+        v = Version(11, 22 ,33, 44)
+        print(v.count) # 4
+        v = Version(11, 22 ,33)
+        print(v.count) # 3
+        v = Version(11, 22)
+        print(v.count) # 2
+        v = Version(11)
+        print(v.count) # 2
+        print(v.to_str()) # 11.0
+        ```
+        '''
+        if self._element_count is None:
+            if self._build == Version._default_no_val:
+                self._element_count = 2
+            elif self._revision == Version._default_no_val:
+                self._element_count = 3
+            else:
+                self._element_count = 4
+        return self._element_count
+            
     # endregion Properties
 
     # region Compare
@@ -506,29 +535,63 @@ class Version(dict):
             return f"{self.major}"
         elif field_count == 2:
             return f"{self.major}.{self.minor}"
-        if self._build == Version._default_no_val:
-            msg = f"Parameter must be between '0' and '2'."
-            raise ArgumentError(msg, 'field_count')
         if field_count == 3:
             return f"{self.major}.{self.minor}.{self.build}"
-        if self._revision == Version._default_no_val:
-            msg = f"Parameter must be between '0' and '3'."
-            raise ArgumentError(msg, 'field_count')
         if field_count == 4:
             return f"{self.major}.{self.minor}.{self.build}.{self.revision}"
 
-    def to_str(self, field_count: int = -1) -> str:
-        if field_count > 0:
-            if field_count > 4:
+    def to_str(self, field_count: Optional[int] = None) -> str:
+        '''
+        Get the version as a string delimite by '.'
+        @field_count: (optional) Type:int, number of fields to return.
+        Must be a value from `1` to `elements` property value.
+        Default: `elements` property value.
+        @example:
+        ```
+        v = Version(11, 22, 33, 44)
+        print(v.to_str() == '11.22.33.44') # True
+        print(v.to_str(field_count=3) == '11.22.33') # True
+        print(v.to_str(field_count=2) == '11.22') # True
+        print(v.to_str(field_count=1) == '11') # True
+        
+        ```
+        '''
+        if field_count is not None:
+            if not isinstance(field_count, int):
+                raise ArgumentError(f"{self.__class__.__name__}.to_str() arg field_count must be of type 'int'")
+            if field_count < 1 or field_count > self.elements:
                 raise ArgumentOutOfRangeError(
-                    "field_count must be from 1 to 4")
+                    f"{self.__class__.__name__}.to_str() arg field_count arg must be from 1 to current instance.elements that currently has a value of '{self.elements}'")
+                        
             return self._to_str(field_count)
-        if self._build == Version._default_no_val:
-            return self._to_str(2)
-        if self._revision == Version._default_no_val:
-            return self._to_str(3)
-        return self._to_str(4)
+        return self._to_str(self.elements)
 
+    def to_tuple(self, field_count: Optional[int] = None) -> Tuple[int]:
+        '''
+        Get the version as a tuple
+        @field_count: (optional) Type:int, number of fields to return.
+        Must be a value from `1` to `elements` property value.
+        Default: `elements` property value.
+        @example:
+        ```
+        v = Version(11, 22, 33, 44)
+        print(v.to_tuple() == (11, 22, 33, 44)) # True
+        print(v.to_tuple(field_count=3) == (11, 22, 33)) # True
+        print(v.to_tuple(field_count=2) == (11, 22)) # True
+        print(v.to_tuple(field_count=1) == (11,)) # True
+        
+        ```
+        '''
+        if field_count is not None:
+            if not isinstance(field_count, int):
+                raise ArgumentError(
+                    f"{self.__class__.__name__}.to_tuple() arg field_count must be of type 'int'")
+            if field_count < 1 or field_count > self.elements:
+                raise ArgumentOutOfRangeError(
+                    f"{self.__class__.__name__}.to_tuple() arg field_count arg must be from 1 to current instance.elements that currently has a value of '{self.elements}'")
+        result = tuple([int(x) for x in self.to_str(field_count=field_count).split('.')])
+        return result
+    
     def __str__(self):
        return self.to_str()
 
