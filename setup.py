@@ -1,38 +1,15 @@
 import pathlib
 import os
-import sys
-import platform
 from setuptools import setup
 
 MODULE_ROOT_NAME='verr'
 PKG_NAME='verr'
 MAJOR = 1
 MINOR = 1
-MICRO = 0
+MICRO = 1
 ISRELEASED = True
 VERSION = f'{MAJOR}.{MINOR}.{MICRO}'
 
-min_version = (3, 6, 0)
-
-
-def is_right_py_version(min_py_version):
-    global PKG_NAME
-    if sys.version_info < (3,):
-        sys.stderr.write(
-            'Python 2 has reached end-of-life and is by ' + PKG_NAME)
-        return False
-
-    if sys.version_info < min_py_version:
-        python_min_version_str = '.'.join((str(num) for num in min_py_version))
-        no_go = f'You are using Python {platform.python_version()}. Python >={python_min_version_str} is  required.'
-        sys.stderr.write(no_go)
-        return False
-
-    return True
-
-
-if not is_right_py_version(min_version):
-    sys.exit(-1)
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -79,6 +56,7 @@ MODULES = get_src_modules(HERE)
 setup(
     name=PKG_NAME,
     version=VERSION,
+    python_requires='>=3.6.0',
     description="Represents a version number that can be parsed and compared.",
     long_description_content_type="text/markdown",
     long_description=README,
