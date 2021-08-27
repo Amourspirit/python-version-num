@@ -10,20 +10,22 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+sys.path.insert(0, os.path.abspath('..'))
 
+from verr import __version__
 
+autosummary_generate = True
 # -- Project information -----------------------------------------------------
 
 project = 'verr'
 copyright = '2021, :Barry-Thomas-Paul: Moss'
 author = ':Barry-Thomas-Paul: Moss'
-
+version = __version__
 # The full version, including alpha/beta/rc tags
-release = '1.1.1'
-
+release = __version__
+pkg_name = 'verr'
 
 # -- General configuration ---------------------------------------------------
 
@@ -31,6 +33,8 @@ release = '1.1.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -53,3 +57,10 @@ html_theme = 'alabaster'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+#global replace but does not work inside code blocks
+rst_epilog = """
+.. |PkgName| replace:: {pkg_name}
+""".format(
+    pkg_name=pkg_name,
+)

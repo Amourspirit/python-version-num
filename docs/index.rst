@@ -6,11 +6,31 @@
 Welcome to verr's documentation!
 ================================
 
+.. image:: https://anaconda.org/conda-forge/verr/badges/version.svg   :target: https://anaconda.org/conda-forge/verr
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Admin guide:
+
+   admin/package_mgmt
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Installation
 
+   installation/install.rst
+
+API Reference
+=============
+
+.. autosummary::
+   :toctree: _autosummary
+
+   verr.Version
 
 Indices and tables
 ==================
