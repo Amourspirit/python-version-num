@@ -26,10 +26,10 @@ class FormatError(ValueError):
 # endregion Error Classes
 class Version(dict):
     '''
-    Represents the version number. This class cannot be extended.
+    Represents the version number. This class **cannot** be extended.
     
-    Remarks:
-        Version instances can be compared usins `=`, `<`, `<=`, `>`, `>=`, `!=`
+    .. tip::
+       Version instances can be compared using ==, <, <=, >, >=, !=
     '''
     # region Internal Classes
     class ParseFailureKind(Enum):
@@ -87,16 +87,17 @@ class Version(dict):
     def __init__(self, *args):
         '''
         Class constructor
-        @version:
+
+        :param version:
             A string containing the major, minor, build, and revision numbers, where each number is delimited
             with a period character ('.').
-        @arg1: Type:int|str If integer then the major version number.
+        :param arg1: Type:int or str If integer then the major version number.
             If str then will be parsed to construct major, minor, build and revision. Samse as `Version.parse()`
-        @arg2: Type:int|str, the minor version number.
-        @arg3: Type:int|str, the build number.
-        @arg4: Type:int|str, the revision number.
+        :param arg2: Type:int or str, the minor version number.
+        :param arg3: Type:int|str, the build number.
+        :param arg4: Type:int|str, the revision number.
         
-        Remarks:
+        .. note::
             The version parameter can contain only the components major, minor, build, and revision, in that
             order, and all separated by periods. There must be at least one component, and at most four. The
             first two components are assumed to be major and minor. The value of unspecified components is
@@ -109,13 +110,13 @@ class Version(dict):
             should be "3.4.2.5".
         
         Version(major, minor)
-            Initializes a new instance of the MfVersion class using the specified major and minor values.
+            Initializes a new instance of the Verson class using the specified major and minor values.
       
         Version(major, minor, build)
-            Initializes a new instance of the MfVersion class using the specified major, minor, and build values.
+            Initializes a new instance of the Verson class using the specified major, minor, and build values.
         
         Version(major, minor, build, revision)
-            Initializes a new instance of the MfVersion class with the specified major, minor, build, and revision numbers.
+            Initializes a new instance of the Verson class with the specified major, minor, build, and revision numbers.
         '''
         if self.__class__.__name__ != 'Version':
             raise TypeError("version is a seal class")
@@ -320,17 +321,18 @@ class Version(dict):
         @error: Will raise errors if they occur. 
         @see also: `try_parse()`
         @example:
-        ```
-        ver = Version.parse("1.3")
-        print(ver.major) # 1
-        print(ver.minor) # 3
-        
-        ver = Version.parse("1.3.8.97")
-        print(ver.major) # 1
-        print(ver.minor) # 3
-        print(ver.build) # 8
-        print(ver.revision) # 97
-        ```
+
+        .. code:: python
+
+            ver = Version.parse("1.3")
+            print(ver.major) # 1
+            print(ver.minor) # 3
+            
+            ver = Version.parse("1.3.8.97")
+            print(ver.major) # 1
+            print(ver.minor) # 3
+            print(ver.build) # 8
+            print(ver.revision) # 97
         '''
         if not isinstance(input, str):
             raise ArgumentError(
@@ -351,16 +353,18 @@ class Version(dict):
         When first element is `True` an instance of the `Version` will be returned as the second element.
         When first element is `False` second element will contain the error that occured that caused the failure.
         @example:
-        ```
-        v_result = Version.try_parse('2.1.12')
-        if v_result[0] == True:
-            v = v_result[1]
-            print(v.major) # 2
-            print(v.minor) # 1
-            print(v.build) # 17
-        else:
-            print("An Error has occured", v_result[1])
-        ```
+
+        .. code:: python
+
+            v_result = Version.try_parse('2.1.12')
+            if v_result[0] == True:
+                v = v_result[1]
+                print(v.major) # 2
+                print(v.minor) # 1
+                print(v.build) # 17
+            else:
+                print("An Error has occured", v_result[1])
+
         '''
         err = None
         if not isinstance(input, str):
@@ -451,17 +455,18 @@ class Version(dict):
         Gets the number of elements in the current instance.
         @return: int of 2, 3 or 4
         @example:
-        ```
-        v = Version(11, 22 ,33, 44)
-        print(v.count) # 4
-        v = Version(11, 22 ,33)
-        print(v.count) # 3
-        v = Version(11, 22)
-        print(v.count) # 2
-        v = Version(11)
-        print(v.count) # 2
-        print(v.to_str()) # 11.0
-        ```
+
+        .. code:: python
+
+            v = Version(11, 22 ,33, 44)
+            print(v.count) # 4
+            v = Version(11, 22 ,33)
+            print(v.count) # 3
+            v = Version(11, 22)
+            print(v.count) # 2
+            v = Version(11)
+            print(v.count) # 2
+            print(v.to_str()) # 11.0
         '''
         if self._element_count is None:
             if self._build == Version._default_no_val:
@@ -547,14 +552,14 @@ class Version(dict):
         Must be a value from `1` to `elements` property value.
         Default: `elements` property value.
         @example:
-        ```
-        v = Version(11, 22, 33, 44)
-        print(v.to_str() == '11.22.33.44') # True
-        print(v.to_str(field_count=3) == '11.22.33') # True
-        print(v.to_str(field_count=2) == '11.22') # True
-        print(v.to_str(field_count=1) == '11') # True
-        
-        ```
+
+        .. code:: python
+
+            v = Version(11, 22, 33, 44)
+            print(v.to_str() == '11.22.33.44') # True
+            print(v.to_str(field_count=3) == '11.22.33') # True
+            print(v.to_str(field_count=2) == '11.22') # True
+            print(v.to_str(field_count=1) == '11') # True
         '''
         if field_count is not None:
             if not isinstance(field_count, int):
@@ -573,14 +578,15 @@ class Version(dict):
         Must be a value from `1` to `elements` property value.
         Default: `elements` property value.
         @example:
-        ```
-        v = Version(11, 22, 33, 44)
-        print(v.to_tuple() == (11, 22, 33, 44)) # True
-        print(v.to_tuple(field_count=3) == (11, 22, 33)) # True
-        print(v.to_tuple(field_count=2) == (11, 22)) # True
-        print(v.to_tuple(field_count=1) == (11,)) # True
-        
-        ```
+
+        .. code:: python
+
+            v = Version(11, 22, 33, 44)
+            print(v.to_tuple() == (11, 22, 33, 44)) # True
+            print(v.to_tuple(field_count=3) == (11, 22, 33)) # True
+            print(v.to_tuple(field_count=2) == (11, 22)) # True
+            print(v.to_tuple(field_count=1) == (11,)) # True
+
         '''
         if field_count is not None:
             if not isinstance(field_count, int):

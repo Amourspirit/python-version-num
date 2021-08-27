@@ -24,6 +24,12 @@ Welcome to verr's documentation!
 
    installation/install.rst
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Module verr
+
+   verr_module
+
 API Reference
 =============
 
