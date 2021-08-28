@@ -2,7 +2,7 @@
 scratch/
 tmp/
 out/
-.vscode/settings.json
+# .vscode/settings.json
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
