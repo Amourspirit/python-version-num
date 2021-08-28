@@ -1,35 +1,112 @@
 # coding: utf-8
-VERSION = __version__ = "1.1.1"
-# coding: utf-8
-
-from enum import Enum
+'''verr Module'''
 from typing import Optional, Tuple, Union
+from enum import Enum
+VERSION = __version__ = "1.1.1"
+
 # region Error Classes
 
 
 class ArgumentError(ValueError):
-    '''The error that is raised when one of the arguments provided to a method is not valid.'''
+    '''
+    The error that is raised when one of the arguments provided to a method is not valid.
+    '''
 
 
 class ArgumentNullError(ValueError):
-    '''The error that is raised when a null reference is passed to a method that does not accept it as a valid argument.'''
+    '''
+    ArgumentNullError()
+        The error that is raised when a null reference is passed to a method that does not accept it as a valid argument.
+    '''
 
 
 class ArgumentOutOfRangeError(IndexError):
-    '''The error that is raised when the value of an argument is outside the allowable range of values as defined by the invoked method.'''
+    '''
+    ArgumentOutOfRangeError()
+        The error that is raised when the value of an argument is outside the allowable range of values as defined by the invoked method.
+    '''
 
 
 class FormatError(ValueError):
-    '''The error that is raised when the format of an argument is invalid, or when a composite format string is not well formed.'''
-
+    '''
+    FormatError()
+        The error that is raised when the format of an argument is invalid, or when a composite format string is not well formed.
+    '''
 
 # endregion Error Classes
+
+
 class Version(dict):
     '''
-    Represents the version number. This class cannot be extended.
+    Represents the version number. This class **cannot** be extended.
+
+    Version(ver_str)
+        Initializes a new instance of the Version class using the specified string to be parsed
+
+    :param ver_str: A string containing the major, minor, build, and revision numbers, where each number is delimited
+        with a period character (``.``).
+    :type ver_str: str
+
+    **Example:**
+
+        .. code:: python
+
+            ver = Version.parse("1.3")
+            print(ver) # 1.3
+
+    Version(major, minor)
+        Initializes a new instance of the Verson class using the specified major and minor values.
+
+    :param major: Major part of the version
+    :type major: int or str
+    :param minor: Minor part of the version
+    :type minor: int or str
     
-    Remarks:
-        Version instances can be compared usins `=`, `<`, `<=`, `>`, `>=`, `!=`
+    **Example:**
+
+        .. code:: python
+
+            ver = Version.parse(1, 3)
+            print(ver) # 1.3
+
+    Version(major, minor, build)
+        Initializes a new instance of the Verson class using the specified major, minor, and build values.
+
+    :param major: Major part of the version
+    :type major: int or str
+    :param minor: Minor part of the version
+    :type minor: int or str
+    :param build: Build part of the version
+    :type build: int or str
+
+    **Example:**
+
+        .. code:: python
+
+            ver = Version.parse(1, 3, 7)
+            print(ver) # 1.3.7
+
+    Version(major, minor, build, revision)
+        Initializes a new instance of the Verson class with the specified major, minor, build, and revision numbers.
+
+    :param major: Major part of the version
+    :type major: int or str
+    :param minor: Minor part of the version
+    :type minor: int or str
+    :param build: Build part of the version
+    :type build: int or str
+    :param revision: Revision part of the version
+    :type revision: int or str
+
+    **Example:**
+
+        .. code:: python
+
+            ver = Version.parse(1, 3, 7, 22)
+            print(ver) # 1.3.7.22
+
+    .. tip::
+       Version instances can be compared using ==, <, <=, >, >=, !=
     '''
     # region Internal Classes
     class ParseFailureKind(Enum):
@@ -87,35 +164,6 @@ class Version(dict):
     def __init__(self, *args):
         '''
         Class constructor
-        @version:
-            A string containing the major, minor, build, and revision numbers, where each number is delimited
-            with a period character ('.').
-        @arg1: Type:int|str If integer then the major version number.
-            If str then will be parsed to construct major, minor, build and revision. Samse as `Version.parse()`
-        @arg2: Type:int|str, the minor version number.
-        @arg3: Type:int|str, the build number.
-        @arg4: Type:int|str, the revision number.
-        
-        Remarks:
-            The version parameter can contain only the components major, minor, build, and revision, in that
-            order, and all separated by periods. There must be at least one component, and at most four. The
-            first two components are assumed to be major and minor. The value of unspecified components is
-            `0`.
-            The format of the version number is as follows. Optional components are shown in square brackets
-            ('[' and ']'):
-            major.minor[.build[.revision]]
-            All defined components must be integers greater than or equal to 0. For example, if the major number
-            is 3, the minor number is 4, the build number is 2, and the revision number is 5, then version
-            should be "3.4.2.5".
-        
-        Version(major, minor)
-            Initializes a new instance of the MfVersion class using the specified major and minor values.
-      
-        Version(major, minor, build)
-            Initializes a new instance of the MfVersion class using the specified major, minor, and build values.
-        
-        Version(major, minor, build, revision)
-            Initializes a new instance of the MfVersion class with the specified major, minor, build, and revision numbers.
         '''
         if self.__class__.__name__ != 'Version':
             raise TypeError("version is a seal class")
@@ -315,22 +363,33 @@ class Version(dict):
     def parse(input: str):
         '''
         Converts the string representation of a version number to an equivalent `Version` instance.
-        @input: A string that contains a version number to convert.
-        @return: A `Version` instance that is equivalent to the version number specified in the input parameter
-        @error: Will raise errors if they occur. 
-        @see also: `try_parse()`
-        @example:
-        ```
-        ver = Version.parse("1.3")
-        print(ver.major) # 1
-        print(ver.minor) # 3
-        
-        ver = Version.parse("1.3.8.97")
-        print(ver.major) # 1
-        print(ver.minor) # 3
-        print(ver.build) # 8
-        print(ver.revision) # 97
-        ```
+
+        :param input: A string that contains a version number to convert.
+        :type input: str
+
+        :return: A :py:class:`Version` instance that is equivalent to the version number specified in the input parameter
+        :rtype: Version
+
+        :rasies FormatError: if ``input`` is a bad format.
+        :rasies ArgumentNullError: if ``input`` is ``None`` or empty.
+        :rasies ArgumentOutOfRangeError: if ``input`` is out of range.
+        :rasies ArgumentError: is there is other errors wiht ``input``
+
+        **See Also:** :py:meth:`Version.try_parse`
+
+        **Example:**
+
+        .. code:: python
+
+            ver = Version.parse("1.3")
+            print(ver.major) # 1
+            print(ver.minor) # 3
+
+            ver = Version.parse("1.3.8.97")
+            print(ver.major) # 1
+            print(ver.minor) # 3
+            print(ver.build) # 8
+            print(ver.revision) # 97
         '''
         if not isinstance(input, str):
             raise ArgumentError(
@@ -345,22 +404,32 @@ class Version(dict):
     def try_parse(input: str) -> Tuple[bool, Union['Version', Exception]]:
         '''
         Converts the string representation of a version number to an equivalent `Version` instance.
-        @input: A string that contains a version number to convert.
-        @return: tuple with the first element as bool. first element will be `True` when parse is a success;
-        Otherwise, first element will be `False`.
-        When first element is `True` an instance of the `Version` will be returned as the second element.
-        When first element is `False` second element will contain the error that occured that caused the failure.
-        @example:
-        ```
-        v_result = Version.try_parse('2.1.12')
-        if v_result[0] == True:
-            v = v_result[1]
-            print(v.major) # 2
-            print(v.minor) # 1
-            print(v.build) # 17
-        else:
-            print("An Error has occured", v_result[1])
-        ```
+
+        :param input: A string that contains a version number to convert.
+        :type input: str
+
+        :return: tuple with the first element as bool. first element will be ``True`` when parse is a success;
+            Otherwise, first element will be ``False``.
+            When first element is ``True`` an instance of the :py:class:`Version` will be returned as the second element.
+            When first element is ``False`` second element will contain the error that occured that caused the failure.
+        :rtype: 
+            tuple(bool, Version) or tuple(bool, Exception)
+
+        **See Also:** :py:meth:`Version.parse`
+
+        **Example:**
+
+        .. code:: python
+
+            v_result = Version.try_parse('2.1.12')
+            if v_result[0] == True:
+                v = v_result[1]
+                print(v.major) # 2
+                print(v.minor) # 1
+                print(v.build) # 17
+            else:
+                print("An Error has occured", v_result[1])
+
         '''
         err = None
         if not isinstance(input, str):
@@ -379,7 +448,9 @@ class Version(dict):
     def build(self) -> int:
         '''
         Gets the value of the build component of the version number for the current Version instance.
-        @return: int representing build
+
+        :return: build portion of :py:class:`Version`
+        :rtype: int
         '''
         if self._build == Version._default_no_val:
             return 0
@@ -389,7 +460,9 @@ class Version(dict):
     def major(self) -> int:
         '''
         Gets the value of the major component of the version number for the current Version instnace.
-        @return: int representing major
+
+        :return: major portion of :py:class:`Version`
+        :rtype: int
         '''
         return self._major
 
@@ -397,15 +470,19 @@ class Version(dict):
     def major_revision(self) -> int:
         '''
         Gets the high 16 bits of the revision number.
-        
-        @remarks:
-        Read-only property
-        Suppose you release an interim version of your application to temporarily correct a problem until you
-        can release a permanent solution. The temporary version does not warrant a new revision number,
-        but it does need to be identified as a different version. In this case, encode the identification
-        information in the high and low 16-bit portions of the 32-bit revision number. Use the `revision`
-        property to obtain the entire revision number, use the `major_revision` property to obtain the high 16 bits,
-        and use the `minor_revision` property to obtain the low 16 bits.
+
+        .. note::
+
+            Read-only property
+            Suppose you release an interim version of your application to temporarily correct a problem until you
+            can release a permanent solution. The temporary version does not warrant a new revision number,
+            but it does need to be identified as a different version. In this case, encode the identification
+            information in the high and low 16-bit portions of the 32-bit revision number. Use the `revision`
+            property to obtain the entire revision number, use the `major_revision` property to obtain the high 16 bits,
+            and use the `minor_revision` property to obtain the low 16 bits.
+
+        :return: major_revision portion of :py:class:`Version`
+        :rtype: int
         '''
         hi_word = self.revision >> 16
         return hi_word
@@ -414,7 +491,9 @@ class Version(dict):
     def minor(self) -> int:
         '''
         Gets the value of the minor component of the version number for the current Version instnace.
-        @return: int representing minor
+
+        :return: minor portion of :py:class:`Version`
+        :rtype: int
         '''
         return self._minor
 
@@ -422,15 +501,19 @@ class Version(dict):
     def minor_revision(self) -> int:
         '''
         Gets the low 16 bits of the revision number.
-        
-        @remarks:
-        Read-only property
-        Suppose you release an interim version of your application to temporarily correct a problem until you
-        can release a permanent solution. The temporary version does not warrant a new revision number,
-        but it does need to be identified as a different version. In this case, encode the identification
-        information in the high and low 16-bit portions of the 32-bit revision number. Use the `revision`
-        property to obtain the entire revision number, use the `major_revision` property to obtain the high 16 bits,
-        and use the `minor_revision` property to obtain the low 16 bits.
+
+        .. note::
+
+            Read-only property
+            Suppose you release an interim version of your application to temporarily correct a problem until you
+            can release a permanent solution. The temporary version does not warrant a new revision number,
+            but it does need to be identified as a different version. In this case, encode the identification
+            information in the high and low 16-bit portions of the 32-bit revision number. Use the `revision`
+            property to obtain the entire revision number, use the `major_revision` property to obtain the high 16 bits,
+            and use the `minor_revision` property to obtain the low 16 bits.
+
+        :return: minor_revision portion of :py:class:`Version`
+        :rtype: int
         '''
         lo_word = self.revision & int('0xFFFF', 16)
         return lo_word
@@ -439,29 +522,35 @@ class Version(dict):
     def revision(self) -> int:
         '''
         Gets the value of the revision component of the version number for the current Version instnace.
-        @return: int representing minor
+
+        :return: revision portion of :py:class:`Version`
+        :rtype: int
         '''
         if self._revision == Version._default_no_val:
             return 0
         return self._revision
-    
+
     @property
-    def elements(self) -> int:
+    def elements(self) -> Tuple[int]:
         '''
         Gets the number of elements in the current instance.
-        @return: int of 2, 3 or 4
-        @example:
-        ```
-        v = Version(11, 22 ,33, 44)
-        print(v.count) # 4
-        v = Version(11, 22 ,33)
-        print(v.count) # 3
-        v = Version(11, 22)
-        print(v.count) # 2
-        v = Version(11)
-        print(v.count) # 2
-        print(v.to_str()) # 11.0
-        ```
+
+        :return: element count of of 2, 3 or 4
+        :rtype: int
+
+        :Example:
+
+        .. code:: python
+
+            v = Version(11, 22 ,33, 44)
+            print(v.count) # 4
+            v = Version(11, 22 ,33)
+            print(v.count) # 3
+            v = Version(11, 22)
+            print(v.count) # 2
+            v = Version(11)
+            print(v.count) # 2
+            print(v.to_str()) # 11.0
         '''
         if self._element_count is None:
             if self._build == Version._default_no_val:
@@ -471,7 +560,7 @@ class Version(dict):
             else:
                 self._element_count = 4
         return self._element_count
-            
+
     # endregion Properties
 
     # region Compare
@@ -542,45 +631,58 @@ class Version(dict):
 
     def to_str(self, field_count: Optional[int] = None) -> str:
         '''
-        Get the version as a string delimite by '.'
-        @field_count: (optional) Type:int, number of fields to return.
-        Must be a value from `1` to `elements` property value.
-        Default: `elements` property value.
-        @example:
-        ```
-        v = Version(11, 22, 33, 44)
-        print(v.to_str() == '11.22.33.44') # True
-        print(v.to_str(field_count=3) == '11.22.33') # True
-        print(v.to_str(field_count=2) == '11.22') # True
-        print(v.to_str(field_count=1) == '11') # True
-        
-        ```
+        Get the version as a string delimite by ``.``
+
+        :param field_count: Number of fields to return. Must be a value from ``1`` to ``elements`` property value.
+            Default: ``elements`` property value.
+        :type field_count: int, optional
+
+        :Example:
+
+        .. code:: python
+
+            v = Version(11, 22, 33, 44)
+            print(v.to_str() == '11.22.33.44') # True
+            print(v.to_str(field_count=3) == '11.22.33') # True
+            print(v.to_str(field_count=2) == '11.22') # True
+            print(v.to_str(field_count=1) == '11') # True
         '''
         if field_count is not None:
             if not isinstance(field_count, int):
-                raise ArgumentError(f"{self.__class__.__name__}.to_str() arg field_count must be of type 'int'")
+                raise ArgumentError(
+                    f"{self.__class__.__name__}.to_str() arg field_count must be of type 'int'")
             if field_count < 1 or field_count > self.elements:
                 raise ArgumentOutOfRangeError(
                     f"{self.__class__.__name__}.to_str() arg field_count arg must be from 1 to current instance.elements that currently has a value of '{self.elements}'")
-                        
+
             return self._to_str(field_count)
         return self._to_str(self.elements)
 
     def to_tuple(self, field_count: Optional[int] = None) -> Tuple[int]:
         '''
         Get the version as a tuple
-        @field_count: (optional) Type:int, number of fields to return.
-        Must be a value from `1` to `elements` property value.
-        Default: `elements` property value.
-        @example:
-        ```
-        v = Version(11, 22, 33, 44)
-        print(v.to_tuple() == (11, 22, 33, 44)) # True
-        print(v.to_tuple(field_count=3) == (11, 22, 33)) # True
-        print(v.to_tuple(field_count=2) == (11, 22)) # True
-        print(v.to_tuple(field_count=1) == (11,)) # True
-        
-        ```
+
+        :param field_count: Number of fields to return.
+            Must be a value from ``1`` to ``elements`` property value.
+            Default: ``elements`` property value.
+        :type field_count: int, optional
+
+        :return: tuple in integers.
+        :rtype: tuple(int)
+
+        :Example:
+
+        .. code:: python
+
+            v = Version(11, 22, 33, 44)
+            print(v.to_tuple() == (11, 22, 33, 44)) # True
+            print(v.to_tuple(field_count=3) == (11, 22, 33)) # True
+            print(v.to_tuple(field_count=2) == (11, 22)) # True
+            print(v.to_tuple(field_count=1) == (11,)) # True
+
+            v = Version(11, 22, 33)
+            print(v.to_tuple()) # (11, 22, 33)
+            print(v.to_tuple(field_count=1)) # (11,)
         '''
         if field_count is not None:
             if not isinstance(field_count, int):
@@ -589,11 +691,12 @@ class Version(dict):
             if field_count < 1 or field_count > self.elements:
                 raise ArgumentOutOfRangeError(
                     f"{self.__class__.__name__}.to_tuple() arg field_count arg must be from 1 to current instance.elements that currently has a value of '{self.elements}'")
-        result = tuple([int(x) for x in self.to_str(field_count=field_count).split('.')])
+        result = tuple([int(x) for x in self.to_str(
+            field_count=field_count).split('.')])
         return result
-    
+
     def __str__(self):
-       return self.to_str()
+        return self.to_str()
 
     def __repr__(self):
         s = self.to_str()
