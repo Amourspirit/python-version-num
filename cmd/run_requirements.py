@@ -12,12 +12,12 @@ def main():
     os.chdir(str(export_path))
    
     cmd_str = "conda list --explicit"
-    with open('pkgs.txt', 'w') as fhandle:
+    with open('pkgs_dev.txt', 'w') as fhandle:
         res = run(cmd_str.split(), stdout=fhandle)
         if res and res.returncode != 0:
             print(res)
     cmd_str = F"conda env export --name {CONDA_ENV_NAME}"
-    with open(f"{CONDA_ENV_NAME}.yml", 'w') as fhandle:
+    with open(f"{CONDA_ENV_NAME}_dev.yml", 'w') as fhandle:
         res = run(cmd_str.split(), stdout=fhandle)
         if res and res.returncode != 0:
             print(res)
