@@ -2,7 +2,7 @@ from subprocess import run
 import pathlib
 import os
 
-ROOT_PATH = pathlib.Path(__file__).parent.parent
+ROOT_PATH = pathlib.Path(__file__).parent.parent.parent
 CONDA_ENV_NAME = 'py-verr'
 
 def main():
