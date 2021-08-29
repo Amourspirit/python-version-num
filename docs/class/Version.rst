@@ -1,4 +1,4 @@
-The ``Version`` class
+``Version`` class
 =====================
 .. autoclass:: verr.Version
     :members:

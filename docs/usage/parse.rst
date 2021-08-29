@@ -28,4 +28,4 @@ Hex strings are required to be prefixed with ``0x``.
     v = Version.parse('0xd.0x02.0x001a.0XAB')
     print(v)  # 13.2.26.171
 
-:See: :py:meth:`verr.Version.parse`
+:See: :py:meth:`~verr.Version.parse`

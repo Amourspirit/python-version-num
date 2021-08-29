@@ -1,4 +1,4 @@
-The ``ArgumentOutOfRangeError`` class
+``ArgumentOutOfRangeError`` class
 =====================================
 .. autoclass:: verr.ArgumentOutOfRangeError
     :members:

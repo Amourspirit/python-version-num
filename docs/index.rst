@@ -22,6 +22,8 @@
 Welcome to verr's documentation!
 ================================
 
+Represents a version number.
+
 `Project Homepage`_
 
 
@@ -35,6 +37,7 @@ Welcome to verr's documentation!
    :maxdepth: 1
    :caption: Classes
 
+   class/Version_overview
    class/Version
    class/ArgumentError
    class/ArgumentNullError

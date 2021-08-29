@@ -1,4 +1,4 @@
-The ``FormatError`` class
+``FormatError`` class
 =========================
 .. autoclass:: verr.FormatError
     :members:

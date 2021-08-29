@@ -1,4 +1,4 @@
-The ``ArgumentNullError`` class
+``ArgumentNullError`` class
 ===============================
 .. autoclass:: verr.ArgumentNullError
     :members:

@@ -1,4 +1,4 @@
-The ``ArgumentError`` class
+``ArgumentError`` class
 ============================
 .. autoclass:: verr.ArgumentError
    :members:
