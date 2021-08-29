@@ -10,7 +10,7 @@ YML_FILE = 'environment.yml'
 
 def main():
     os.chdir(str(ROOT_PATH))
-    cmd_str = f"conda env update --prefix '{ENV_PATH}' --file {YML_FILE} --prune"
+    cmd_str = f"conda env update --prefix {ENV_NAME} --file {YML_FILE} --prune"
     res = run(cmd_str.split(' '))
     if res and res.returncode != 0:
         print(res)
