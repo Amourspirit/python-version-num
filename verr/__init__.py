@@ -33,6 +33,8 @@ class Version(dict):
     '''
     # region Internal Classes
     class ParseFailureKind(Enum):
+        ''''''
+        # Empty Docstring so sphinx will ignore
         NONE = 0
         ARGUMENT_NULL_ERR = 1
         ARGUMENT_ERR = 2
@@ -315,6 +317,7 @@ class Version(dict):
     def parse(input: str):
         '''
         Converts the string representation of a version number to an equivalent `Version` instance.
+<<<<<<< HEAD
         @input: A string that contains a version number to convert.
         @return: A `Version` instance that is equivalent to the version number specified in the input parameter
         @error: Will raise errors if they occur. 
@@ -331,6 +334,35 @@ class Version(dict):
         print(ver.build) # 8
         print(ver.revision) # 97
         ```
+=======
+
+        :param input: A string that contains a version number to convert.
+        :type input: str
+
+        :return: A :py:class:`Version` instance that is equivalent to the version number specified in the input parameter
+        :rtype: Version
+
+        :rasies FormatError: if ``input`` is a bad format.
+        :rasies ArgumentNullError: if ``input`` is ``None`` or empty.
+        :rasies ArgumentOutOfRangeError: if ``input`` is out of range.
+        :rasies ArgumentError: is there is other errors wiht ``input``
+
+        **See Also:** :py:meth:`~verr.Version.try_parse`
+
+        **Example:**
+
+        .. code:: python
+
+            ver = Version.parse("1.3")
+            print(ver.major) # 1
+            print(ver.minor) # 3
+
+            ver = Version.parse("1.3.8.97")
+            print(ver.major) # 1
+            print(ver.minor) # 3
+            print(ver.build) # 8
+            print(ver.revision) # 97
+>>>>>>> Docs Update (#7)
         '''
         if not isinstance(input, str):
             raise ArgumentError(
@@ -345,6 +377,7 @@ class Version(dict):
     def try_parse(input: str) -> Tuple[bool, Union['Version', Exception]]:
         '''
         Converts the string representation of a version number to an equivalent `Version` instance.
+<<<<<<< HEAD
         @input: A string that contains a version number to convert.
         @return: tuple with the first element as bool. first element will be `True` when parse is a success;
         Otherwise, first element will be `False`.
@@ -361,6 +394,34 @@ class Version(dict):
         else:
             print("An Error has occured", v_result[1])
         ```
+=======
+
+        :param input: A string that contains a version number to convert.
+        :type input: str
+
+        :return: tuple with the first element as bool. first element will be ``True`` when parse is a success;
+            Otherwise, first element will be ``False``.
+            When first element is ``True`` an instance of the :py:class:`Version` will be returned as the second element.
+            When first element is ``False`` second element will contain the error that occured that caused the failure.
+        :rtype: 
+            tuple(bool, Version) or tuple(bool, Exception)
+
+        **See Also:** :py:meth:`~verr.Version.parse`
+
+        **Example:**
+
+        .. code:: python
+
+            v_result = Version.try_parse('2.1.12')
+            if v_result[0] == True:
+                v = v_result[1]
+                print(v.major) # 2
+                print(v.minor) # 1
+                print(v.build) # 17
+            else:
+                print("An Error has occured", v_result[1])
+
+>>>>>>> Docs Update (#7)
         '''
         err = None
         if not isinstance(input, str):
@@ -542,6 +603,7 @@ class Version(dict):
 
     def to_str(self, field_count: Optional[int] = None) -> str:
         '''
+<<<<<<< HEAD
         Get the version as a string delimite by '.'
         @field_count: (optional) Type:int, number of fields to return.
         Must be a value from `1` to `elements` property value.
@@ -555,6 +617,24 @@ class Version(dict):
         print(v.to_str(field_count=1) == '11') # True
         
         ```
+=======
+        Get the version as a string delimited by ``.``
+
+        :param field_count: Number of fields to return. Must be a value from ``1``
+            to :py:attr:`~verr.Version.elements` property value.
+            Default: :py:attr:`~verr.Version.elements` property value.
+        :type field_count: int, optional
+
+        :Example:
+
+        .. code-block:: python
+
+            v = Version(11, 22, 33, 44)
+            print(v.to_str() == '11.22.33.44') # True
+            print(v.to_str(field_count=3) == '11.22.33') # True
+            print(v.to_str(field_count=2) == '11.22') # True
+            print(v.to_str(field_count=1) == '11') # True
+>>>>>>> Docs Update (#7)
         '''
         if field_count is not None:
             if not isinstance(field_count, int):
@@ -569,6 +649,7 @@ class Version(dict):
     def to_tuple(self, field_count: Optional[int] = None) -> Tuple[int]:
         '''
         Get the version as a tuple
+<<<<<<< HEAD
         @field_count: (optional) Type:int, number of fields to return.
         Must be a value from `1` to `elements` property value.
         Default: `elements` property value.
@@ -581,6 +662,30 @@ class Version(dict):
         print(v.to_tuple(field_count=1) == (11,)) # True
         
         ```
+=======
+
+        :param field_count: Number of fields to return.
+            Must be a value from ``1`` to :py:attr:`~verr.Version.elements` property value.
+            Default: :py:attr:`~verr.Version.elements` property value.
+        :type field_count: int, optional
+
+        :return: tuple in integers.
+        :rtype: tuple(int)
+
+        :Example:
+
+        .. code:: python
+
+            v = Version(11, 22, 33, 44)
+            print(v.to_tuple() == (11, 22, 33, 44)) # True
+            print(v.to_tuple(field_count=3) == (11, 22, 33)) # True
+            print(v.to_tuple(field_count=2) == (11, 22)) # True
+            print(v.to_tuple(field_count=1) == (11,)) # True
+
+            v = Version(11, 22, 33)
+            print(v.to_tuple()) # (11, 22, 33)
+            print(v.to_tuple(field_count=1)) # (11,)
+>>>>>>> Docs Update (#7)
         '''
         if field_count is not None:
             if not isinstance(field_count, int):
