@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "./env",
-    "restructuredtext.confPath": ""
+    "python.pythonPath": "${workspaceFolder}/env",
+    "restructuredtext.confPath": "${workspaceFolder}/docs"
 }

@@ -110,6 +110,8 @@ class Version(dict):
     '''
     # region Internal Classes
     class ParseFailureKind(Enum):
+        ''''''
+        # Empty Docstring so sphinx will ignore
         NONE = 0
         ARGUMENT_NULL_ERR = 1
         ARGUMENT_ERR = 2
@@ -375,7 +377,7 @@ class Version(dict):
         :rasies ArgumentOutOfRangeError: if ``input`` is out of range.
         :rasies ArgumentError: is there is other errors wiht ``input``
 
-        **See Also:** :py:meth:`Version.try_parse`
+        **See Also:** :py:meth:`~verr.Version.try_parse`
 
         **Example:**
 
@@ -415,7 +417,7 @@ class Version(dict):
         :rtype: 
             tuple(bool, Version) or tuple(bool, Exception)
 
-        **See Also:** :py:meth:`Version.parse`
+        **See Also:** :py:meth:`~verr.Version.parse`
 
         **Example:**
 
@@ -531,7 +533,7 @@ class Version(dict):
         return self._revision
 
     @property
-    def elements(self) -> Tuple[int]:
+    def elements(self) -> int:
         '''
         Gets the number of elements in the current instance.
 
@@ -631,15 +633,16 @@ class Version(dict):
 
     def to_str(self, field_count: Optional[int] = None) -> str:
         '''
-        Get the version as a string delimite by ``.``
+        Get the version as a string delimited by ``.``
 
-        :param field_count: Number of fields to return. Must be a value from ``1`` to ``elements`` property value.
-            Default: ``elements`` property value.
+        :param field_count: Number of fields to return. Must be a value from ``1``
+            to :py:attr:`~verr.Version.elements` property value.
+            Default: :py:attr:`~verr.Version.elements` property value.
         :type field_count: int, optional
 
         :Example:
 
-        .. code:: python
+        .. code-block:: python
 
             v = Version(11, 22, 33, 44)
             print(v.to_str() == '11.22.33.44') # True
@@ -663,8 +666,8 @@ class Version(dict):
         Get the version as a tuple
 
         :param field_count: Number of fields to return.
-            Must be a value from ``1`` to ``elements`` property value.
-            Default: ``elements`` property value.
+            Must be a value from ``1`` to :py:attr:`~verr.Version.elements` property value.
+            Default: :py:attr:`~verr.Version.elements` property value.
         :type field_count: int, optional
 
         :return: tuple in integers.

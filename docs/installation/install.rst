@@ -5,7 +5,7 @@ INSTALLING VERR
 CONDA
 =====
 
-| ``verr`` from `Anaconda <conda_>`_:
+| ``verr`` from `Anaconda <condaverr_>`_:
 | If you use ``conda``, you can install ``verr`` from the ``conda-forge`` channel:
 
 
@@ -48,4 +48,4 @@ Itâ€™s important to be able to reconstruct the set of packages and versions youâ
    * Poetry: `virtual environments and pyproject.toml <https://python-poetry.org/docs/basic-usage/>`_
 
 .. _pypi: https://pypi.org/project/verr/
-.. _conda: https://anaconda.org/conda-forge/verr
+.. _condaverr: https://anaconda.org/conda-forge/verr
