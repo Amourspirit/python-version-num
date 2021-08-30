@@ -375,7 +375,7 @@ class Version(dict):
         :rasies FormatError: if ``input`` is a bad format.
         :rasies ArgumentNullError: if ``input`` is ``None`` or empty.
         :rasies ArgumentOutOfRangeError: if ``input`` is out of range.
-        :rasies ArgumentError: is there is other errors wiht ``input``
+        :rasies ArgumentError: is there is other errors with ``input``
 
         **See Also:** :py:meth:`~verr.Version.try_parse`
 
