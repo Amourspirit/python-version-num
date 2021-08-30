@@ -6,7 +6,7 @@ Represents a version number.
 
 ## Docs
 
-Documentation [here](https://python-version-num.readthedocs.io/en/latest/)
+Documentation on [Read the Docs](https://python-version-num.readthedocs.io/en/latest/)
 
 ## Installation
 
