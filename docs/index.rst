@@ -22,10 +22,22 @@
 Welcome to verr's documentation!
 ================================
 
+Represents a version number.
+
+`Project Homepage`_
+
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Installation
+
+   installation/install.rst
+
 .. tocTree::
    :maxdepth: 1
    :caption: Classes
 
+   class/Version_overview
    class/Version
    class/ArgumentError
    class/ArgumentNullError
@@ -44,23 +56,13 @@ Welcome to verr's documentation!
 
 .. toctree::
    :maxdepth: 1
-   :caption: Admin guide:
+   :caption: Development:
 
-   admin/package_mgmt
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Installation
-
-   installation/install.rst
+   dev/development
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+
+.. _Project Homepage: https://github.com/Amourspirit/python-version-num

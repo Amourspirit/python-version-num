@@ -3,6 +3,7 @@ JSON Usage
 
 .. code:: python
 
+    import json
     from verr import Version
 
     v1 = Version(1, 2, 3, 4)

@@ -23,5 +23,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-# conda env create --prefix ./env -f environment.yml
-# conda env update --prefix ./env --file environment.yml  --prune
+

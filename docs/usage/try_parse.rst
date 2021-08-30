@@ -27,4 +27,4 @@ Hex strings are required to be prefixed with ``0x``.
         err = v_result[1]
         print(e)
 
-:See: :py:meth:`verr.Version.try_parse`
+:See: :py:meth:`~verr.Version.try_parse`
