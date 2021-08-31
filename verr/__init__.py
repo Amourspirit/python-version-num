@@ -63,7 +63,7 @@ class Version(dict):
     :type major: int or str
     :param minor: Minor part of the version
     :type minor: int or str
-    
+
     **Example:**
 
         .. code:: python
@@ -287,7 +287,7 @@ class Version(dict):
                 # this will pass sucha string as '(0xab12)', '[0x_ab%12]'
                 # '[0x_ab%12]' would strip to 0xab12
                 _arg = _arg.lower()
-                try_str:str = "".join(re.findall("[a-z0-9]+", _arg))
+                try_str: str = "".join(re.findall("[a-z0-9]+", _arg))
                 base = 16 if try_str.startswith('0x') else 10
                 result = int(try_str, base)
                 return result
@@ -385,7 +385,11 @@ class Version(dict):
         :rasies ArgumentOutOfRangeError: if ``input`` is out of range.
         :rasies ArgumentError: is there is other errors with ``input``
 
-        **See Also:** :py:meth:`~verr.Version.try_parse`
+        .. include:: ../notes/hex_note.rst
+        .. include:: ../notes/parse_malformed.rst
+
+        | **See Also:** :py:meth:`~verr.Version.try_parse`
+        | **See Also:** *Usage:* :doc:`../usage/parse`
 
         **Example:**
 
@@ -425,7 +429,11 @@ class Version(dict):
         :rtype: 
             tuple(bool, Version) or tuple(bool, Exception)
 
-        **See Also:** :py:meth:`~verr.Version.parse`
+        .. include:: ../notes/hex_note.rst
+        .. include:: ../notes/parse_malformed.rst
+
+        | **See Also:** :py:meth:`~verr.Version.parse`
+        | **See Also:** *Usage:* :doc:`../usage/try_parse`
 
         **Example:**
 
