@@ -1,14 +1,12 @@
 import pathlib
 import os
 from setuptools import setup
+from verr import __version__
 
 MODULE_ROOT_NAME='verr'
 PKG_NAME='verr'
-MAJOR = 1
-MINOR = 1
-MICRO = 1
 ISRELEASED = True
-VERSION = f'{MAJOR}.{MINOR}.{MICRO}'
+VERSION = __version__
 
 
 # The directory containing this file

@@ -1,5 +1,7 @@
-Construct via int
-=================
+Constructor via int
+===================
+
+**Example:** Constructor including hex strings.
 
 .. code:: python
 
@@ -21,3 +23,8 @@ Construct via int
     print(v.elements) # 2
     print(v.to_tuple()) # (11, 22)
     print(v.to_str()) # 11.22
+
+.. include:: ../notes/hex_note.rst
+.. include:: ../notes/parse_malformed.rst
+
+**See Also:** :doc:`../class/Version`

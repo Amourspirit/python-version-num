@@ -1,5 +1,7 @@
 if __name__ == '__main__':
-    import path_imports
+    import sys
+    import os
+    sys.path.append(os.path.realpath('.'))
 
 import unittest
 from verr import FormatError, Version, ArgumentError, ArgumentOutOfRangeError, ArgumentNullError
