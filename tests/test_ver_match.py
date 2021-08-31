@@ -1,6 +1,9 @@
 # coding: utf-8
 if __name__ == '__main__':
-    import path_imports
+    import sys
+    import os
+    sys.path.append(os.path.realpath('.'))
+
 from os import minor
 from pathlib import Path
 from typing import Iterator, Union

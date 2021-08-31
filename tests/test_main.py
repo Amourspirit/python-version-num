@@ -1,6 +1,8 @@
 # coding: utf-8
 if __name__ == '__main__':
-    import path_imports
+    import sys
+    import os
+    sys.path.append(os.path.realpath('.'))
 
 import unittest
 from verr import Version, ArgumentError, ArgumentOutOfRangeError, ArgumentNullError
@@ -8,7 +10,42 @@ from verr import Version, ArgumentError, ArgumentOutOfRangeError, ArgumentNullEr
 # run test in order
 unittest.TestLoader.sortTestMethodsUsing = None
 
+class TestVersionParseIntArg(unittest.TestCase):
+    def test_int(self):
+        result = Version._parse_int_arg(13, 'test')
+        self.assertEqual(result, 13)
 
+    def test_hex_0x(self):
+        hex_str = '0xab12'
+        dec = 43794
+        result = Version._parse_int_arg(hex_str, 'test')
+        self.assertEqual(result, dec)
+    
+    def test_hex_malformed(self):
+        hex_str = '(0x_ab12)'
+        dec = 43794
+        result = Version._parse_int_arg(hex_str, 'test')
+        self.assertEqual(result, dec)
+        hex_str = '(##0$$$x_ab12&*_   )'
+        result = Version._parse_int_arg(hex_str, 'test')
+        self.assertEqual(result, dec)
+    
+    def test_dec_malformed(self):
+        dec_str = '  (_43_79434!@#$%^&*+_)"2"'
+        dec = 43794342
+        result = Version._parse_int_arg(dec_str, 'test')
+        self.assertEqual(result, dec)
+
+    def test_dec_malformed_error(self):
+        dec_str = 'a43794342'
+        with self.assertRaises(ArgumentError):
+            result = Version._parse_int_arg(dec_str, 'test')
+    
+    def test_hex_malformed_error(self):
+        dec_str = 'xab23'
+        with self.assertRaises(ArgumentError):
+            result = Version._parse_int_arg(dec_str, 'test')
+        
 class TestVersion(unittest.TestCase):
 
     def test_001(self):

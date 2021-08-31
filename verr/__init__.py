@@ -2,6 +2,8 @@
 '''verr Module'''
 from typing import Optional, Tuple, Union
 from enum import Enum
+import re
+
 VERSION = __version__ = "1.1.1"
 
 # region Error Classes
@@ -278,13 +280,19 @@ class Version(dict):
                 return result
             except:
                 pass
-            _arg = _arg.lower()
-            if _arg.startswith('0x'):
-                try:
-                    result = int(_arg, 16)
-                    return result
-                except:
-                    pass
+            try:
+                # pyton accepts an optional prefix of 0x
+                # strip any chars such as _ from the string.
+                # leave all alpha chars just in case not a valid hex.
+                # this will pass sucha string as '(0xab12)', '[0x_ab%12]'
+                # '[0x_ab%12]' would strip to 0xab12
+                _arg = _arg.lower()
+                try_str:str = "".join(re.findall("[a-z0-9]+", _arg))
+                base = 16 if try_str.startswith('0x') else 10
+                result = int(try_str, base)
+                return result
+            except:
+                pass
         msg = (f"{cls.__name__}, arg '{arg_name}' cannot be converted to an interger."
                f" '{arg_name}' type '{type(arg).__name__}'")
         raise ArgumentError(msg)
