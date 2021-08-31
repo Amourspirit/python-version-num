@@ -4,7 +4,7 @@ from typing import Optional, Tuple, Union
 from enum import Enum
 import re
 
-VERSION = __version__ = "1.1.1"
+VERSION = __version__ = "1.1.2"
 
 # region Error Classes
 
