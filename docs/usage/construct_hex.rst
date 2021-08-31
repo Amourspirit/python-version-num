@@ -1,11 +1,9 @@
-Construct via hex
-=================
+Constructor via hex
+===================
 
 **Hex** strings are accepted in the constructor.
-Hex strings are required to be prefixed with ``0x``.
 
-.. tip::
-    Hex strings are *not* case sensitive.
+**Example:** Constructor including hex strings.
 
 .. code:: python
 
@@ -22,3 +20,8 @@ Hex strings are required to be prefixed with ``0x``.
 
     v = Version('0xd', '0x02', '0x001a', '0XAB')
     print(v)  # 13.2.26.171
+
+.. include:: ../notes/hex_note.rst
+.. include:: ../notes/parse_malformed.rst
+
+**See Also:** :doc:`../class/Version`
